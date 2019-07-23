@@ -144,7 +144,7 @@ if __name__ == '__main__':
             new_labels[:,i] = np.array([ ln.index(l) if l in ln else -1 for l in labels[:,c] ])
         labels = new_labels
         cats = categories
-        
+
     # read in CNN features
     feats = {}
     for sample,imagelist in sample_images.items():
@@ -167,7 +167,7 @@ if __name__ == '__main__':
         feats[sample] = np.concatenate(feats[sample],axis=0)
         if len(feats[sample].shape) == 1:
             feats[sample] = feats[sample].reshape((1,len(feats[sample])))
-            
+
         # compute mean if needed
         if mi_type is None or mi_type.lower() == 'none':
             if len(feats[sample].shape) > 1:
@@ -214,7 +214,7 @@ if __name__ == '__main__':
         options['predict_type'] = mi_type
     if metric is not None:
         options['metric'] = metric
-                        
+
     for c,cat_name in enumerate(cats):
         print(cat_name)
         res = ResultsReport(label_names[c])
@@ -234,7 +234,7 @@ if __name__ == '__main__':
                 # discard samples missing a label for sample_weight category
                 idx_train = idx_train[np.where(labels_sw[idx_train]!=-1)[0]]
                 X_train = [ feats[samples[i]] for i in idx_train ]
-                
+
                 y_train = labels[idx_train,c]
                 y_sw = y_train + len(label_names[c])*labels_sw[idx_train]
 
@@ -316,6 +316,6 @@ if __name__ == '__main__':
                     if len(label_names[c]) == 2:
                         res.add('sensitivity '+group_name,float( np.logical_and(y_test[idx]==1, y_predict[idx]==y_test[idx]).sum() ) / (y_test[idx]==1).sum() )
                         res.add('specificity '+group_name,float( np.logical_and(y_test[idx]!=1, y_predict[idx]==y_test[idx]).sum() ) / (y_test[idx]!=1).sum() )
-            
+
         print('Cross-validation results')
         res.print_summary()
