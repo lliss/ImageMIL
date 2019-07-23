@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import sklearn.model_selection
 import sklearn.metrics
+import pickle
 
 import util
 from linear_classifier import LinearClassifier
@@ -255,7 +256,12 @@ if __name__ == '__main__':
                     options['quantiles'] = int(quantiles)
                 model = SIL( n_jobs=n_jobs, **options )
                 model.fit( X_train, y_train, calibrate=calibrate, param_search=True, sample_weight=sw )
-                
+
+            # Save model for future use.
+            pickle_filename = cat_name + '_model_' + str(int(time.time())) + '.pkl'
+            with open(pickle_filename, 'wb') as output_file:
+                pickle.dump(model, output_file)
+
             p_predict = model.predict( X_test )
             y_predict = np.argmax(p_predict,axis=1)
             acc = sklearn.metrics.accuracy_score( y_test, y_predict )
