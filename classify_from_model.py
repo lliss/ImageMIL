@@ -1,9 +1,9 @@
 import argparse
-import numpy as np
-import sklearn.model_selection
-import sklearn.metrics
 import pickle
 
+import numpy as np
+import sklearn.metrics
+import sklearn.model_selection
 from linear_classifier import LinearClassifier
 from sil import SIL
 
